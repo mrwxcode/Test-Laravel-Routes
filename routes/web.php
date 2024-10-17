@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 // Task 1: point the main "/" URL to the HomeController method "index"
 // Put one code line here below
-Route::get('/', [HomeController::class, 'index']);
+Route::view('/', [HomeController::class, 'index']);
 
 // Task 2: point the GET URL "/user/[name]" to the UserController method "show"
 // It doesn't use Route Model Binding, it expects $name as a parameter
@@ -33,11 +33,13 @@ Route::get('users/{name}', [UserController::class, 'show']);
 // resources/views/pages/about.blade.php - without any controller
 // Also, assign the route name "about"
 // Put one code line here below
-Route::view('/about', 'page.about')->name('about');
+Route::get('/about', function() {
+    return view('pages.about');
+})->name('about');
 
 // Task 4: redirect the GET URL "log-in" to a URL "login"
 // Put one code line here below
-Route::redirect('/log-in', '/login');
+Route::get('/log-in', [AuthenticatedSessionController::class, 'create']);
 
 // Task 5: group the following route sentences below in Route::group()
 // Assign middleware "auth"
@@ -55,7 +57,7 @@ Route::group(['middleware' => 'auth'], function(){
         // Task 7: point URL /app/dashboard to a "Single Action" DashboardController
         // Assign the route name "dashboard"
         // Put one Route Group code line here below
-        Route::get('/dashboard', [DashboardController::class])->name('dashboard');
+        Route::get('dashboard', [DashboardController::class])->name('dashboard');
 
         // Task 8: Manage tasks with URL /app/tasks/***.
         // Add ONE line to assign 7 resource routes to TaskController
@@ -75,11 +77,11 @@ Route::group(['middleware' => 'auth'], function(){
 
         // Task 10: point URL /admin/dashboard to a "Single Action" Admin/DashboardController
         // Put one code line here below
-        Route::view('/dashboard', [AdminDashboardController::class]);
+        Route::view('dashboard', [AdminDashboardController::class]);
 
         // Task 11: point URL /admin/stats to a "Single Action" Admin/StatsController
         // Put one code line here below
-        Route::view('/stats', [AdminStatsController::class]);
+        Route::view('stats', [AdminStatsController::class]);
 
     });
     // End of the /admin Route Group
